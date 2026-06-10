@@ -1,0 +1,20 @@
+// 09_logic.m0 - 布林運算
+print("true and false = ", true and false);
+print("true or false = ", true or false);
+print("not true = ", not true);
+print("not false = ", not false);
+
+x = 5;
+if (x > 3 and x < 10) {
+    print(x, " is between 3 and 10");
+}
+
+if (x == 3 or x == 5) {
+    print(x, " is 3 or 5");
+}
+
+// 空值檢查
+y = nil;
+if (not y) {
+    print("y is falsy");
+}

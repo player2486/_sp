@@ -1,0 +1,10 @@
+// 02_arith.m0 - 算術運算
+a = 10;
+b = 3;
+
+print("a + b = ", a + b);
+print("a - b = ", a - b);
+print("a * b = ", a * b);
+print("a / b = ", a / b);
+print("a % b = ", a % b);
+print("-a = ", -a);

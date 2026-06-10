@@ -1,0 +1,12 @@
+// 08_dict.m0 - 字典
+person = {name: "Alice", age: 25, city: "Taipei"};
+print("name: ", person.name);
+print("age: ", person.age);
+print("city: ", person.city);
+
+person.age = 26;
+print("new age: ", person.age);
+
+// 用字串當鍵
+scores = {"math": 95, "english": 88, "science": 92};
+print("math: ", scores["math"]);

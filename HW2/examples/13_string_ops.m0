@@ -1,0 +1,12 @@
+// 13_string_ops.m0 - 字串操作
+greeting = "Hello";
+name = "m0";
+print(greeting + ", " + name + "!");
+
+msg = "The answer is ";
+print(msg + str(42));
+
+// 字串索引
+s = "abcdef";
+print("s[0] = ", s[0]);
+print("s[3] = ", s[3]);

@@ -1,0 +1,9 @@
+// 05_for.m0 - for 迴圈 (Fibonacci)
+a = 0;
+b = 1;
+for (i = 0; i < 20; i = i + 1) {
+    print(a);
+    temp = a + b;
+    a = b;
+    b = temp;
+}
