@@ -1,0 +1,151 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body {
+  background: #1a1a2e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+  overflow: hidden;
+}
+
+#game-container {
+  position: relative;
+  border: 3px solid #2d2d5e;
+  border-radius: 8px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.5);
+}
+
+#gameCanvas {
+  display: block;
+  background: #87CEEB;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+#ui-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, transparent 100%);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  pointer-events: none;
+}
+
+#level-info {
+  background: rgba(255,255,255,0.15);
+  padding: 4px 14px;
+  border-radius: 20px;
+}
+
+#score-info {
+  letter-spacing: 1px;
+}
+
+#birds-info {
+  background: rgba(255,255,255,0.15);
+  padding: 4px 14px;
+  border-radius: 20px;
+}
+
+#ui-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  gap: 12px;
+  z-index: 10;
+}
+
+#ui-overlay.hidden {
+  display: none;
+}
+
+#overlay-title {
+  font-size: 48px;
+  font-weight: 800;
+  color: white;
+  text-shadow: 0 3px 10px rgba(0,0,0,0.5);
+}
+
+#overlay-score {
+  font-size: 28px;
+  font-weight: 600;
+  color: #FFD54F;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+#overlay-stars {
+  font-size: 40px;
+  letter-spacing: 8px;
+}
+
+#overlay-btn {
+  margin-top: 10px;
+  padding: 12px 40px;
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #FF6F00, #FF8F00);
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255,111,0,0.4);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+#overlay-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(255,111,0,0.6);
+}
+
+#overlay-btn:active {
+  transform: scale(0.97);
+}
+
+#ui-controls {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  z-index: 5;
+}
+
+#btn-reset {
+  width: 36px;
+  height: 36px;
+  font-size: 20px;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+#btn-reset:hover {
+  background: rgba(255,255,255,0.35);
+}

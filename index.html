@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Angry Birds - 憤怒鳥</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="game-container">
+  <canvas id="gameCanvas"></canvas>
+  <div id="ui-top">
+    <div id="level-info">第 1 關</div>
+    <div id="score-info">分數: 0</div>
+    <div id="birds-info">小鳥: 3</div>
+  </div>
+  <div id="ui-overlay" class="hidden">
+    <div id="overlay-title"></div>
+    <div id="overlay-score"></div>
+    <div id="overlay-stars"></div>
+    <button id="overlay-btn"></button>
+  </div>
+  <div id="ui-controls">
+    <button id="btn-reset" title="重新開始">↺</button>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+<script src="js/levels.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
