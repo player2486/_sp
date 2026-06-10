@@ -1,59 +1,39 @@
 # 執行範例
 
-## 基本命令
+## 啟動
 
 ```
-msh> ls -la
-total 60
-drwxr-xr-x 2 user user  4096 Jun 10 16:45 .
-drwxr-xr-x 3 user user  4096 Jun 10 16:44 ..
--rw-r--r-- 1 user user  1286 Jun 10 16:45 Makefile
--rw-r--r-- 1 user user 10562 Jun 10 16:45 msh.c
+$ make
+gcc -Wall -Wextra -o hw7-top src/main.c src/procfs.c src/display.c
+
+$ ./hw7-top
 ```
 
-## 管線
+## 畫面說明
 
 ```
-msh> ls -l | grep .c | wc -l
-3
+HW7 Process Monitor     16:30:31     更新中... (按 q 離開)
+行程: 26     CPU: user=938  sys=644  idle=61206  Mem: 1385 MB / 7851 MB (18%)
 
-msh> ps aux | grep bash | head -3
-user       310  0.0  0.0  10336  3728 ?        S    16:00   0:00 bash
-user      1422  0.0  0.0  10336  3492 pts/0    Ss   16:30   0:00 bash
+  PID     %CPU     %MEM     NAME                  STATE     RSS
+     1    0.0      0.0     systemd                SLEEP     20M
+    39    0.0      0.1     systemd-journal        SLEEP     10M
+    92    0.0      0.0     systemd-udevd          SLEEP     5M
+   304    0.0      0.0     SessionLeader          SLEEP     6M
+   310    0.0      0.0     bash                   SLEEP     4M
+    ...
 ```
 
-## 重新導向
+## 排序操作
+
+預設依 CPU% 排序。按 `2` 切換到 CPU、`3` 切換到 MEM：
 
 ```
-msh> echo "hello world" > test.txt
-msh> cat < test.txt
-hello world
-
-msh> ls nonexistent 2> error.log
-msh> cat error.log
-ls: cannot access 'nonexistent': No such file or directory
+排序: %CPU  |  1:PID  2:CPU  3:MEM  4:NAME  q:離開
 ```
 
-## 背景執行
+## 狀態著色
 
-```
-msh> sleep 10 &
-[1] 1567
-msh> jobs
-[1] Running    sleep 10 &
-msh> kill 1567
-[1] Terminated    sleep 10 &
-```
-
-## 內建指令
-
-```
-msh> pwd
-/home/user
-msh> cd /tmp
-msh> pwd
-/tmp
-msh> cd -
-/home/user
-msh> exit
-```
+- 綠色：Running（執行中）
+- 青色：Sleep（休眠中）
+- 紅色：Zombie（殭屍）

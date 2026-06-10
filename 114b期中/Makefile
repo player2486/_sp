@@ -1,12 +1,11 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g
+CFLAGS = -Wall -Wextra
 
-TARGET = msh
+SRC = src
+TARGET = hw7-top
 
-all: $(TARGET)
-
-$(TARGET): src/msh.c
-	$(CC) $(CFLAGS) -o $(TARGET) src/msh.c
+$(TARGET): $(SRC)/main.c $(SRC)/procfs.c $(SRC)/display.c
+	$(CC) $(CFLAGS) -o $(TARGET) $^
 
 clean:
 	rm -f $(TARGET)

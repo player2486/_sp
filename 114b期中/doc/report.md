@@ -2,71 +2,71 @@
 
 ## 一、專案動機
 
-這個專案是系統程式課程的期中作業。從 HW1 到 HW7，我學了編譯器、執行緒同步、行程管理、檔案操作等觀念，這個 Shell 專案正好可以綜合運用這些知識。
+這是系統程式課程的期中專題。從 HW1 的編譯器、HW5 的執行緒同步、HW6 的行程與檔案操作一路學來，我希望能做一個整合性的工具，把所學的系統程式知識付諸實作。
 
-我參考了陳鍾誠老師的 course0 教材中的系統程式章節，以及 c-classical 專案中的 C 語言程式風格。
+選擇 Process Monitor（行程監控工具）的原因：
+1. **實用性**：`top` 是每個系統管理者天天在用的工具，實作它很有成就感
+2. **整合性**：涵蓋了檔案 I/O、行程管理、系統資訊讀取等多個面向
+3. **可擴展**：可以持續加入更多功能（網路監控、磁碟 I/O 等）
 
 ## 二、實作歷程
 
-### 第一版：基本命令執行
+### 第一版：讀取 /proc 基本資訊
 
-最簡單的版本：讀取命令 → fork → execvp → wait。
+先理解 `/proc` 檔案系統的結構。Linux 把行程、CPU、記憶體等系統資訊都以「檔案」的形式暴露出來。
 
-```c
-pid_t pid = fork();
-if (pid == 0) {
-    execvp(cmd->argv[0], cmd->argv);
-    exit(1);
-}
-waitpid(pid, &status, 0);
+```bash
+cat /proc/stat       # CPU 時間
+cat /proc/meminfo    # 記憶體
+cat /proc/1/stat     # init 行程狀態
 ```
 
-### 第二版：加入管線
+用 `fopen` + `fgets` 讀取這些檔案，再用 `sscanf` 解析。
 
-實作 `|` 時才真正理解 pipe + dup2 的威力。
+### 第二版：解析 /proc/[pid]/stat
 
-```c
-pipe(pipefd);
-pid_t pid = fork();
-if (pid == 0) {
-    dup2(pipefd[1], STDOUT_FILENO);
-    // 執行左邊命令
-}
-pid_t pid2 = fork();
-if (pid2 == 0) {
-    dup2(pipefd[0], STDIN_FILENO);
-    // 執行右邊命令
-}
+這是最困難的部分。格式是空格的連續數值，但第二欄（行程名稱）用括號包圍且可能含空格：
+
+```
+1234 (program name) R 0 0 0 ...
 ```
 
-### 第三版：加入重新導向
+我的解法：找到 `(` 和 `)` 的位置，手動擷取名稱，再從後面繼續 sscanf。
 
-支援 `>`、`<`、`>>`、`2>`。
+### 第三版：顯示與更新
 
-### 第四版：背景執行與信號處理
+使用 ANSI escape code 控制畫面。關鍵技巧：
+- `\033[H` 回到左上角 → 達到「更新」效果
+- `tcsetattr()` 設定 raw mode → 即時讀取按鍵
 
-處理 `&`、SIGINT、SIGCHLD。
+### 第四版：CPU 使用率計算
 
-## 三、遇到的問題
+需要兩次取樣：
 
-1. **管線解析**：`ls -l | grep c | wc -l` 要正確分割成三段命令，再用 pipe 串接。
-   - 解法：遞迴處理管線，每遇到一個 `|` 就 fork 一組 pipe。
+1. 記錄第一次的 CPU 時間與各行程時間
+2. 等一秒
+3. 記錄第二次的資料
+4. `cpu% = (process_time_diff / total_cpu_diff) × 100`
 
-2. **背景行程清理**：子行程結束時要避免變成殭屍。
-   - 解法：註冊 SIGCHLD handler，在 handler 中呼叫 `waitpid(-1, NULL, WNOHANG)`。
+## 三、遇到的問題與解法
 
-3. **Stderr 重新導向**：`2>` 與 `>` 的解析不同。
-   - 解法：檢查 token 是否為 `2>`，若是則開啟檔案並 `dup2(fd, STDERR_FILENO)`。
+| 問題 | 解法 |
+|------|------|
+| `/proc/[pid]/stat` 名稱含空格無法用 sscanf | 手動找 `()` 位置 |
+| 多執行緒輸出交錯 | 用 mutex 保護 |
+| 終端機畫面閃爍 | 先清除再重繪，每秒一次 |
+| RSS 顯示負數 | 修正 sscanf 欄位對齊 |
 
 ## 四、學到的觀念
 
-- fork 後的檔案描述子複製行為
-- pipe 的讀寫端關閉時機（避免死鎖）
-- SIGCHLD 的非同步處理
-- execvp 的 PATH 搜尋機制
+1. **Linux 一切皆檔案**：連系統資訊都可以用 read/write 操作
+2. **行程在核心中的資料結構**：PCB 中的 PID、狀態、CPU 時間、記憶體
+3. **ANSI terminal control**：不需要 ncurses 也能做出 TUI
+4. **取樣與差值計算**：CPU% 不是直接讀取的，而是透過兩次取樣計算
 
 ## 五、參考資源
 
-- https://github.com/ccc-c/c-classical
+- https://github.com/ccc-c/ (c-classical 專案中的 C 語言風格)
 - https://github.com/ccckmit/course0/tree/main/code/系統程式
-- Linux man pages: fork(2), execvp(3), pipe(2), dup2(2), signal(7)
+- Linux man pages: proc(5), termios(3), ioctl(2)
+- /proc 文件系統：https://www.kernel.org/doc/html/latest/filesystems/proc.html

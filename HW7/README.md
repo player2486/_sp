@@ -39,7 +39,7 @@ gcc -o hw7-top src/main.c src/procfs.c src/display.c
 ## 目錄結構
 
 ```
-HW7/
+HW7/                 ← 程式碼目錄
 ├── README.md
 ├── Makefile
 ├── src/
@@ -47,4 +47,12 @@ HW7/
 │   ├── procfs.c/h   # 讀取 /proc 檔案系統
 │   └── display.c/h  # 終端機顯示
 └── REPORT.md        # 學習報告
+
+114b期中/            ← 期中專題（與 HW7 同主題）
+├── README.md        # 含完整 AI 聲明與專題說明
+└── doc/
+    ├── report.md    # 詳細學習報告
+    └── examples.md  # 執行範例
 ```
+
+**備註**：本專案同時作為期中專題（114b期中），同一份程式碼。詳細報告與 AI 使用聲明請見 `../114b期中/`。
