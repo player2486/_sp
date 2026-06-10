@@ -8,8 +8,8 @@
   const SLING_Y = 435;
   const SLING_FORK_L = { x: SLING_X - 14, y: SLING_Y - 42 };
   const SLING_FORK_R = { x: SLING_X + 14, y: SLING_Y - 42 };
-  const MAX_DRAG = 160;
-  const LAUNCH_FORCE = 0.007;
+  const MAX_DRAG = 300;
+  const LAUNCH_FORCE = 0.015;
   const SETTLE_SPEED = 0.35;
   const SETTLE_FRAMES = 100;
   const BIRD_RADIUS = 15;
@@ -259,7 +259,7 @@
           y: a.velocity.y - b.velocity.y,
         };
         const speed = Math.sqrt(rv.x * rv.x + rv.y * rv.y);
-        const dmg = speed * 2.0;
+        const dmg = speed * 4.0;
 
         hurt(a, dmg);
         hurt(b, dmg);
