@@ -188,12 +188,9 @@
       e.preventDefault();
       const p = pos(e);
       if (G.phase !== 'ready' || !G.currentBird) return;
-      const d = dist(p, { x: SLING_X, y: SLING_Y });
-      if (d < 50) {
-        G.isDragging = true;
-        G.dragEnd = { x: p.x, y: p.y };
-        G.phase = 'aiming';
-      }
+      G.isDragging = true;
+      G.dragEnd = { x: p.x, y: p.y };
+      G.phase = 'aiming';
     }
 
     function move(e) {
